@@ -13,5 +13,12 @@ namespace Persistence.Data
             base.OnConfiguring(optionsBuilder);
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserEntity>().HasIndex(u => u.Email).IsUnique();
+        }
+
     }
 }
