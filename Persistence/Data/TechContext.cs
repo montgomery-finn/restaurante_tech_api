@@ -6,6 +6,7 @@ namespace Persistence.Data
     public class TechContext : DbContext
     {
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

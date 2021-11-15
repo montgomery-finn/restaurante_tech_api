@@ -13,7 +13,7 @@ namespace Persistence.Migrations
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
                     PriceInPoints = table.Column<int>(type: "int", nullable: false),
                     FileName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },

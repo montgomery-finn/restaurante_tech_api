@@ -8,7 +8,7 @@ namespace Domain.Repositories
     {
         Task<UserModel> GetByID(Guid id);
         Task<UserModel> GetByEmail(string email);
-        Task Create(UserModel ProductModel);
+        Task Add(UserModel ProductModel);
         Task Update(UserModel ProductModel);
         Task Delete(UserModel ProductModel);
     }

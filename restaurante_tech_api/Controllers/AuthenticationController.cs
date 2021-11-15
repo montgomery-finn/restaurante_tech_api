@@ -33,7 +33,7 @@ namespace restaurante_tech_api.Controllers
                 var encodedPassword = _cryptographyService.GetEncodedString(createDTO.password);
                 var user = new UserModel(createDTO.name, createDTO.email, encodedPassword);
 
-                await _userRepository.Create(user);
+                await _userRepository.Add(user);
                 return Ok();
             }
 

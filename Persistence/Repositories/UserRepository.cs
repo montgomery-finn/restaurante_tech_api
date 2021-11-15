@@ -16,7 +16,7 @@ namespace Persistence.Repositories
             _context = new TechContext();
         }
 
-        public async Task Create(UserModel userModel)
+        public async Task Add(UserModel userModel)
         {
             await _context.Users.AddAsync(userModel.ToEntity());
             await _context.SaveChangesAsync();

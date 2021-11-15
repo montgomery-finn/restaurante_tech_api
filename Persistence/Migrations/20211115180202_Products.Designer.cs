@@ -10,7 +10,7 @@ using Persistence.Data;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(TechContext))]
-    [Migration("20211111191741_Products")]
+    [Migration("20211115180202_Products")]
     partial class Products
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,8 +33,8 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("PriceInPoints")
                         .HasColumnType("int");

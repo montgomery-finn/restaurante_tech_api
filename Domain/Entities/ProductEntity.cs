@@ -7,13 +7,13 @@ namespace Domain.Entities
     {
         public Guid ID { get; set; }
         public string Name { get; private set; }
-        public decimal Price { get; private set; }
+        public double Price { get; private set; }
         public int PriceInPoints { get; private set; }
         public string FileName { get; private set; }
 
         public ProductEntity() { }
 
-        public ProductEntity(string name, decimal price, int priceInPoints, string fileName, Guid id)
+        public ProductEntity(string name, double price, int priceInPoints, string fileName, Guid id)
         {
             ID = id;
             Name = name;
