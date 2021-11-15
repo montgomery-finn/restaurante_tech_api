@@ -56,6 +56,7 @@ namespace restaurante_tech_api
             services.AddTransient<ICryptographyService, CryptographyService>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

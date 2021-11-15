@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31727.386
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "restaurante_tech_api", "restaurante_tech_api\restaurante_tech_api.csproj", "{7FDD7C4B-1F96-4A90-96B7-406F25EC5634}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{3F74F854-5994-4ACA-94CE-633DEF522499}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{3F74F854-5994-4ACA-94CE-633DEF522499}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{14EE3DB5-C82A-487F-86B2-7E7B22BEDBCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{14EE3DB5-C82A-487F-86B2-7E7B22BEDBCA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

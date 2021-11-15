@@ -2,6 +2,7 @@
 using Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using restaurante_tech_api.DTOs;
 using restaurante_tech_api.Services.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -22,23 +23,10 @@ namespace restaurante_tech_api.Controllers
             _tokenService = tokenService;
         }
 
-
-        public class CreateDTO
-        {
-            [Required, MinLength(3)]
-            public string name { get; set; }
-
-            [Required, EmailAddress]
-            public string email { get; set; }
-            
-            [Required, MinLength(6)]
-            public string password { get; set; }
-        }
-
         [HttpPost]
         [Route("register")]
         [AllowAnonymous]
-        public async Task<dynamic> CreateUser(CreateDTO createDTO)
+        public async Task<dynamic> CreateUser(CreateUserDTO createDTO)
         {
             if (ModelState.IsValid)
             {
@@ -50,14 +38,6 @@ namespace restaurante_tech_api.Controllers
             }
 
             return StatusCode(400);
-        }
-
-        public class AuthorizeDTO
-        {
-            [Required, EmailAddress]
-            public string email { get; set; }
-
-            public string password { get; set; }
         }
 
         [HttpPost]
