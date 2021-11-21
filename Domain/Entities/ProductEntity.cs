@@ -6,10 +6,10 @@ namespace Domain.Entities
     public class ProductEntity : EntityClass
     {
         public Guid ID { get; set; }
-        public string Name { get; private set; }
-        public double Price { get; private set; }
-        public int PriceInPoints { get; private set; }
-        public string FileName { get; private set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int PriceInPoints { get; set; }
+        public string FileName { get; set; }
 
         public ProductEntity() { }
 
