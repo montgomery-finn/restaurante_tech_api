@@ -10,6 +10,7 @@ namespace Persistence.Data
         public DbSet<CustomerEntity> Customers { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
         public DbSet<OrderProductEntity> OrderProducts { get; set; }
+        public DbSet<NewOrderNotificationEntity> NewOrderNotifications { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
