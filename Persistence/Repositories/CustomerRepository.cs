@@ -3,6 +3,7 @@ using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Persistence.Repositories
@@ -21,6 +22,13 @@ namespace Persistence.Repositories
             var entity = customerModel.ToEntity();
             await _context.AddAsync(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<CustomerModel> GetByCPF(string cpf)
+        {
+            var entity = await _context.Customers.Where(c => c.CPF == cpf).FirstOrDefaultAsync();
+
+            return entity?.ToModel();
         }
     }
 }

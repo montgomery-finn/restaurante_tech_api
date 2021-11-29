@@ -58,6 +58,7 @@ namespace restaurante_tech_api
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<ISaveFileFromBase64StringService, SaveFileFromBase64StringService>();
         }
 

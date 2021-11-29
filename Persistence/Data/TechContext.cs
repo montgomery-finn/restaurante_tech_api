@@ -8,6 +8,9 @@ namespace Persistence.Data
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<CustomerEntity> Customers { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<OrderProductEntity> OrderProducts { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
