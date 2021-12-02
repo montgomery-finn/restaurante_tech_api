@@ -11,7 +11,7 @@ namespace Domain.Models
     {
         public Guid ID { get; private set; }
         public Guid OrderId { get; private set; }
-        public OrderModel Order { get; private set; }
+        public OrderModel Order { get; set; }
 
         public NewOrderNotificationModel(Guid orderId, OrderModel orderModel, Guid? id = null)
         {

@@ -55,12 +55,14 @@ namespace restaurante_tech_api
 
             services.AddTransient<ICryptographyService, CryptographyService>();
             services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<ISaveFileFromBase64StringService, SaveFileFromBase64StringService>();
+            services.AddSingleton<INewOrderNotificationService, NewOrderNotificationService>();
+
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<INewOrderNotificationRepository, NewOrderNotificationRepository>();
-            services.AddTransient<ISaveFileFromBase64StringService, SaveFileFromBase64StringService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

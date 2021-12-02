@@ -24,7 +24,7 @@ namespace Domain.Entities
 
         public override NewOrderNotificationModel ToModel()
         {
-            return new NewOrderNotificationModel(OrderId, Order.ToModel(), ID);
+            return new NewOrderNotificationModel(OrderId, Order?.ToModel(), ID);
         }
     }
 }

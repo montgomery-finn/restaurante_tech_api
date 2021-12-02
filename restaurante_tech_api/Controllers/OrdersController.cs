@@ -2,6 +2,7 @@
 using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using restaurante_tech_api.DTOs;
+using restaurante_tech_api.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,19 @@ namespace restaurante_tech_api.Controllers
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
         private readonly IOrderRepository _orderRepository;
+        private readonly INewOrderNotificationService _newOrderNotificationService;
 
-        public OrdersController(ICustomerRepository customerRepository, IProductRepository productRepository, IOrderRepository orderRepository)
+        public OrdersController(
+            ICustomerRepository customerRepository, 
+            IProductRepository productRepository, 
+            IOrderRepository orderRepository,
+            INewOrderNotificationService newOrderNotificationService
+            )
         {
             _customerRepository = customerRepository;
             _productRepository = productRepository;
             _orderRepository = orderRepository;
+            _newOrderNotificationService = newOrderNotificationService;
         }
 
         [HttpGet]
@@ -43,6 +51,9 @@ namespace restaurante_tech_api.Controllers
             }
 
             await _orderRepository.Add(orderModel);
+
+            var notification = new NewOrderNotificationModel(orderModel.ID, null);
+            await _newOrderNotificationService.AddNotification(notification);
 
             return Ok();
         }

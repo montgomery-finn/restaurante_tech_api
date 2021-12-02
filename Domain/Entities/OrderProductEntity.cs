@@ -37,7 +37,7 @@ namespace Domain.Entities
 
         public override OrderProductModel ToModel()
         {
-            return new OrderProductModel(ProductId, Product?.ToModel(), Quantity, OrderId, Order.ToModel(), ID);
+            return new OrderProductModel(ProductId, Product?.ToModel(), Quantity, OrderId, null, ID);
         }
     }
 }

@@ -32,5 +32,25 @@ namespace Persistence.Repositories
             var models = entities.Select(e => e.ToModel()).ToList();
             return models;
         }
+
+        public async Task Remove(NewOrderNotificationModel newOrderNotificationModel)
+        {
+            var entity = newOrderNotificationModel.ToEntity();
+            _context.Attach(entity);
+            _context.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task LoadOrder(NewOrderNotificationModel newOrderNotificationModel)
+        {
+            var entity = newOrderNotificationModel.ToEntity();
+            _context.Attach(entity);
+
+            await _context.Entry(entity).Reference(e => e.Order).Query()
+                        .Include(o => o.Customer)
+                        .Include(o => o.OrderProducts).ThenInclude(op => op.Product).LoadAsync();
+
+            newOrderNotificationModel.Order = entity.Order.ToModel();
+        }
     }
 }

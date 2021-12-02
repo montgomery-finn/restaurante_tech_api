@@ -11,5 +11,7 @@ namespace Domain.Repositories
     {
         public Task<List<NewOrderNotificationModel>> GetAll();
         public Task Add(NewOrderNotificationModel newOrderNotificationModel);
+        public Task Remove(NewOrderNotificationModel newOrderNotificationModel);
+        public Task LoadOrder(NewOrderNotificationModel newOrderNotificationModel);
     }
 }

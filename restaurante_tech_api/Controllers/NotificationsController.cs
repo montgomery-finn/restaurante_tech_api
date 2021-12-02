@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using restaurante_tech_api.Results;
+using restaurante_tech_api.Services.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,28 +14,11 @@ namespace restaurante_tech_api.Controllers
     [Route("Notifications")]
     public class NotificationsController : Controller
     {
-        private static ConcurrentBag<StreamWriter> _clients = new ConcurrentBag<StreamWriter>();
+        private readonly INewOrderNotificationService _newOrderNotificationService;
 
-        private static List<Item> _itens = new List<Item>();
-
-
-        [HttpPost]
-        public async Task<ActionResult<Item>> Post([FromBody] Item value)
+        public NotificationsController(INewOrderNotificationService newOrderNotificationService)
         {
-            if (value == null)
-                return BadRequest();
-
-            if (value.Id == 0)
-            {
-                var max = _itens.Count == 0 ? 0 : _itens.Max(i => i.Id);
-                value.Id = max + 1;
-            }
-
-            _itens.Add(value);
-
-            await WriteOnStream(value, "Item added");
-
-            return value;
+            _newOrderNotificationService = newOrderNotificationService;
         }
 
         [HttpGet]
@@ -45,48 +29,13 @@ namespace restaurante_tech_api.Controllers
                     var wait = cancelToken.WaitHandle;
                     var client = new StreamWriter(stream);
 
-                    AddItemsToStream(client);
-
-                    _clients.Add(client);
+                    _newOrderNotificationService.AddClient(client);
 
                     wait.WaitOne();
 
-                    StreamWriter ignore;
-                    _clients.TryTake(out ignore);
+                    _newOrderNotificationService.TryTake();
                 },
                 HttpContext.RequestAborted);
-        }
-
-        public class Item
-        {
-            public long Id { get; set; }
-            public string Name { get; set; }
-            public bool IsComplete { get; set; }
-
-            public override string ToString() => $"{Id} - {Name} - {IsComplete}";
-        }
-
-
-        private async Task WriteOnStream(Item data, string action)
-        {
-            foreach (var client in _clients)
-            {
-                string jsonData = string.Format("{0}\n", JsonSerializer.Serialize(new { data, action }));
-                await client.WriteAsync(jsonData);
-                await client.FlushAsync();
-            }
-        }
-
-        private async void AddItemsToStream(StreamWriter stream)
-        {
-            string jsonData = "";
-            foreach(var item in _itens)
-            {
-                jsonData += string.Format("{0}\n", JsonSerializer.Serialize(new { item, action = "item loaded" }));
-            }
-
-            await stream.WriteAsync(jsonData);
-            await stream.FlushAsync();
         }
     }
 }
