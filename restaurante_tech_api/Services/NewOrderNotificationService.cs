@@ -1,9 +1,11 @@
 ﻿using Domain.Models;
 using Domain.Repositories;
 using restaurante_tech_api.Services.Interfaces;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -65,18 +67,23 @@ namespace restaurante_tech_api.Services
             await SendToClients(newOrderNotification, "Item added");
         }
 
-        public async Task RemoveNotification(NewOrderNotificationModel newOrderNotification)
+        public async Task RemoveNotificationFromOrder(Guid orderId)
         {
-            _newOrderNotifications.Remove(newOrderNotification);
-            await _newOrderNotificationRepository.Remove(newOrderNotification);
-            await SendToClients(newOrderNotification, "Item removed");
+            var notification = _newOrderNotifications.Where(n => n.OrderId == orderId).FirstOrDefault();
+
+            if(notification != null)
+            {
+                await _newOrderNotificationRepository.Remove(notification);
+                _newOrderNotifications.Remove(notification);
+                await SendToClients(notification, "Item removed");
+            }
         }
 
         private async Task SendToClients(NewOrderNotificationModel data, string action)
         {
             foreach (var client in _clients)
             {
-                string jsonData = string.Format("[{0}]", JsonSerializer.Serialize(new { data, action }));
+                string jsonData = string.Format("[{0}]", JsonSerializer.Serialize(new { item = data, action }));
                 await client.WriteAsync(jsonData);
                 await client.FlushAsync();
             }

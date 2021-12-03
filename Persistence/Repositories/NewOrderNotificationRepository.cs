@@ -24,6 +24,7 @@ namespace Persistence.Repositories
             var entity = newOrderNotificationModel.ToEntity();
             await _context.AddAsync(entity);
             await _context.SaveChangesAsync();
+            _context.Entry(entity).State = EntityState.Unchanged;
         }
 
         public async Task<List<NewOrderNotificationModel>> GetAll()
@@ -36,7 +37,6 @@ namespace Persistence.Repositories
         public async Task Remove(NewOrderNotificationModel newOrderNotificationModel)
         {
             var entity = newOrderNotificationModel.ToEntity();
-            _context.Attach(entity);
             _context.Remove(entity);
             await _context.SaveChangesAsync();
         }
@@ -44,11 +44,15 @@ namespace Persistence.Repositories
         public async Task LoadOrder(NewOrderNotificationModel newOrderNotificationModel)
         {
             var entity = newOrderNotificationModel.ToEntity();
-            _context.Attach(entity);
 
-            await _context.Entry(entity).Reference(e => e.Order).Query()
-                        .Include(o => o.Customer)
-                        .Include(o => o.OrderProducts).ThenInclude(op => op.Product).LoadAsync();
+            entity.Order = await _context.Orders.Where(o => o.ID == entity.OrderId).AsNoTracking().FirstOrDefaultAsync();
+            entity.Order.Customer = await _context.Customers.Where(c => c.ID == entity.Order.CustomerId).AsNoTracking().FirstOrDefaultAsync();
+            entity.Order.OrderProducts = await _context.OrderProducts.Where(o => o.OrderId == entity.Order.ID).AsNoTracking().ToListAsync();
+
+            foreach(var orderProduct in entity.Order.OrderProducts)
+            {
+                orderProduct.Product = await _context.Products.Where(p => p.ID == orderProduct.ProductId).AsNoTracking().FirstOrDefaultAsync();
+            }
 
             newOrderNotificationModel.Order = entity.Order.ToModel();
         }

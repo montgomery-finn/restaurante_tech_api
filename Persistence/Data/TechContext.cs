@@ -16,6 +16,7 @@ namespace Persistence.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=127.0.0.1,1433; Database=RestauranteTech; User Id=SA; Password=Jko3va-D9821jhsvGD;");
+            optionsBuilder.EnableSensitiveDataLogging();
             base.OnConfiguring(optionsBuilder);
         }
 

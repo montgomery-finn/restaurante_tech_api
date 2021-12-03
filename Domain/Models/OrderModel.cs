@@ -12,13 +12,28 @@ namespace Domain.Models
         public Guid ID { get; private set; }
         public CustomerModel Customer { get; private set; }
 
+        public bool Finished { get; private set; }
+
         private List<OrderProductModel> _orderProducts;
         public IReadOnlyList<OrderProductModel> OrderProducts { get { return _orderProducts; } }
 
-        public OrderModel(CustomerModel customer, List<OrderProductModel> orderProducts, Guid? id = null)
+        public void Finish()
+        {
+            Finished = true;
+        }
+
+        public OrderModel(CustomerModel customer, List<OrderProductModel> orderProducts)
+        {
+            ID = Guid.NewGuid();
+            Customer = customer;
+            _orderProducts = orderProducts ?? new List<OrderProductModel>();
+        }
+
+        public OrderModel(CustomerModel customer, bool finished, List<OrderProductModel> orderProducts, Guid? id = null)
         {
             ID = id ?? Guid.NewGuid();
             Customer = customer;
+            Finished = finished;
             _orderProducts = orderProducts ?? new List<OrderProductModel>();
         }
 
@@ -30,7 +45,7 @@ namespace Domain.Models
 
         public override OrderEntity ToEntity()
         {
-            return new OrderEntity(ID, Customer?.ToEntity(), OrderProducts.Select(o => o.ToEntity()).ToList());
+            return new OrderEntity(ID, Customer?.ToEntity(), Finished, OrderProducts.Select(o => o.ToEntity()).ToList());
         }
     }
 }

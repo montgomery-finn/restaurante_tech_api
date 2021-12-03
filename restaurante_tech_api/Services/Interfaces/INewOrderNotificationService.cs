@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace restaurante_tech_api.Services.Interfaces
     {
         void AddClient(StreamWriter client);
         Task AddNotification(NewOrderNotificationModel newOrderNotification);
-        Task RemoveNotification(NewOrderNotificationModel newOrderNotification);
+        Task RemoveNotificationFromOrder(Guid orderId);
         void TryTake();
     }
 }

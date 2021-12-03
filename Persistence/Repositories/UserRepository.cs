@@ -18,8 +18,10 @@ namespace Persistence.Repositories
 
         public async Task Add(UserModel userModel)
         {
-            await _context.Users.AddAsync(userModel.ToEntity());
+            var entity = userModel.ToEntity();
+            await _context.Users.AddAsync(entity);
             await _context.SaveChangesAsync();
+            _context.Entry(entity).State = EntityState.Unchanged;
         }
 
         public async Task Delete(UserModel userModel)

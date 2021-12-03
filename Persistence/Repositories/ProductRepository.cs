@@ -23,6 +23,7 @@ namespace Persistence.Repositories
             var entity = productModel.ToEntity();
             await _context.AddAsync(entity);
             await _context.SaveChangesAsync();
+            _context.Entry(entity).State = EntityState.Unchanged;
         }
 
         public async Task<List<ProductModel>> GetAll()

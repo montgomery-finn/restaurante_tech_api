@@ -22,11 +22,12 @@ namespace Persistence.Repositories
             var entity = customerModel.ToEntity();
             await _context.AddAsync(entity);
             await _context.SaveChangesAsync();
+            _context.Entry(entity).State = EntityState.Unchanged;
         }
 
         public async Task<CustomerModel> GetByCPF(string cpf)
         {
-            var entity = await _context.Customers.Where(c => c.CPF == cpf).FirstOrDefaultAsync();
+            var entity = await _context.Customers.Where(c => c.CPF == cpf).AsNoTracking().FirstOrDefaultAsync();
 
             return entity?.ToModel();
         }

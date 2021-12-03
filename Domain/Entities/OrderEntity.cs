@@ -11,6 +11,7 @@ namespace Domain.Entities
     {
         public Guid ID { get; set; }
         public Guid? CustomerId { get; set; }
+        public bool Finished { get; set; }
         public CustomerEntity Customer { get; set; }
         public List<OrderProductEntity> OrderProducts { get; set; }
 
@@ -19,17 +20,18 @@ namespace Domain.Entities
 
         }
 
-        public OrderEntity(Guid id, CustomerEntity customer, List<OrderProductEntity> orderProducts)
+        public OrderEntity(Guid id, CustomerEntity customer, bool finished, List<OrderProductEntity> orderProducts)
         {
             ID = id;
             CustomerId = customer?.ID;
             Customer = customer;
+            Finished = finished;
             OrderProducts = orderProducts;
         }
 
         public override OrderModel ToModel()
         {
-            return new OrderModel(Customer?.ToModel(), OrderProducts.Select(o => o.ToModel()).ToList(), ID);
+            return new OrderModel(Customer?.ToModel(), Finished, OrderProducts?.Select(o => o.ToModel()).ToList(), ID);
         }
     }
 }

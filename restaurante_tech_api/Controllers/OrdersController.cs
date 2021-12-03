@@ -70,6 +70,26 @@ namespace restaurante_tech_api.Controllers
             return customer;
         }
 
-        
+        [HttpPost, Route("Finish")]
+        public async Task<IActionResult> Finish([FromBody] FinishOrderDTO dto)
+        {
+            if (String.IsNullOrEmpty(dto.orderId))
+                return StatusCode(400);
+
+            var orderIdGuid = Guid.Parse(dto.orderId);
+
+            var order = await _orderRepository.GetById(orderIdGuid);
+
+            if (order == null)
+                return NotFound();
+
+            order.Finish();
+
+            await _orderRepository.Update(order);
+
+            await _newOrderNotificationService.RemoveNotificationFromOrder(orderIdGuid);
+
+            return Ok();
+        }
     }
 }
