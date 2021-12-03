@@ -26,7 +26,7 @@ namespace restaurante_tech_api.Controllers
         }
 
         [HttpGet]
-        public async Task<List<ProductModel>> Index()
+        public async Task<List<Product>> Index()
         {
             return await _productRepository.GetAll();
         }
@@ -39,7 +39,7 @@ namespace restaurante_tech_api.Controllers
 
             var fileName = await _saveFileFromBase64StringService.Execute(createProductDTO.base64Image);
 
-            var product = new ProductModel(createProductDTO.name, createProductDTO.price, createProductDTO.priceInPoints, fileName);
+            var product = new Product(createProductDTO.name, createProductDTO.price, createProductDTO.priceInPoints, fileName);
 
             await _productRepository.Add(product);
 

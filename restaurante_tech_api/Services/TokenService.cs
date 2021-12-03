@@ -13,7 +13,7 @@ namespace restaurante_tech_api.Services
 {
     public class TokenService : ITokenService
     {
-        public string GenerateToken(UserModel userModel)
+        public string GenerateToken(User userModel)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Settings.Secret);

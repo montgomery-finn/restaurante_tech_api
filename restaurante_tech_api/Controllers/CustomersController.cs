@@ -1,13 +1,9 @@
 ﻿using Domain.Models;
 using Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using restaurante_tech_api.DTOs;
 using restaurante_tech_api.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace restaurante_tech_api.Controllers
@@ -29,7 +25,7 @@ namespace restaurante_tech_api.Controllers
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
 
-            var customer = new CustomerModel(createCustomerDTO.cpf);
+            var customer = new Customer(createCustomerDTO.cpf);
 
             await _customerRepository.Add(customer);
 

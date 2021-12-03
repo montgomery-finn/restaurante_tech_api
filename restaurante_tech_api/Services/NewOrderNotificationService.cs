@@ -15,7 +15,7 @@ namespace restaurante_tech_api.Services
     {
         private readonly INewOrderNotificationRepository _newOrderNotificationRepository;
         private ConcurrentBag<StreamWriter> _clients;
-        private List<NewOrderNotificationModel> _newOrderNotifications;
+        private List<NewOrderNotification> _newOrderNotifications;
 
         public NewOrderNotificationService(INewOrderNotificationRepository newOrderNotificationRepository)
         {
@@ -59,7 +59,7 @@ namespace restaurante_tech_api.Services
             await stream.FlushAsync();
         }
 
-        public async Task AddNotification(NewOrderNotificationModel newOrderNotification)
+        public async Task AddNotification(NewOrderNotification newOrderNotification)
         {
             await _newOrderNotificationRepository.Add(newOrderNotification);
             await _newOrderNotificationRepository.LoadOrder(newOrderNotification);
@@ -79,7 +79,7 @@ namespace restaurante_tech_api.Services
             }
         }
 
-        private async Task SendToClients(NewOrderNotificationModel data, string action)
+        private async Task SendToClients(NewOrderNotification data, string action)
         {
             foreach (var client in _clients)
             {

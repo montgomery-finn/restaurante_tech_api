@@ -1,12 +1,9 @@
-﻿using Domain.Models;
-using Domain.Repositories;
+﻿using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Domain.Models;
 
 namespace Persistence.Repositories
 {
@@ -19,42 +16,30 @@ namespace Persistence.Repositories
             _context = new TechContext();
         }
 
-        public async Task Add(NewOrderNotificationModel newOrderNotificationModel)
+        public async Task Add(NewOrderNotification newOrderNotification)
         {
-            var entity = newOrderNotificationModel.ToEntity();
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            _context.Entry(entity).State = EntityState.Unchanged;
-        }
-
-        public async Task<List<NewOrderNotificationModel>> GetAll()
-        {
-            var entities = await _context.NewOrderNotifications.AsNoTracking().ToListAsync();
-            var models = entities.Select(e => e.ToModel()).ToList();
-            return models;
-        }
-
-        public async Task Remove(NewOrderNotificationModel newOrderNotificationModel)
-        {
-            var entity = newOrderNotificationModel.ToEntity();
-            _context.Remove(entity);
+            await _context.AddAsync(newOrderNotification);
             await _context.SaveChangesAsync();
         }
 
-        public async Task LoadOrder(NewOrderNotificationModel newOrderNotificationModel)
+        public Task<List<NewOrderNotification>> GetAll()
         {
-            var entity = newOrderNotificationModel.ToEntity();
+            return _context.NewOrderNotifications.ToListAsync();
+        }
 
-            entity.Order = await _context.Orders.Where(o => o.ID == entity.OrderId).AsNoTracking().FirstOrDefaultAsync();
-            entity.Order.Customer = await _context.Customers.Where(c => c.ID == entity.Order.CustomerId).AsNoTracking().FirstOrDefaultAsync();
-            entity.Order.OrderProducts = await _context.OrderProducts.Where(o => o.OrderId == entity.Order.ID).AsNoTracking().ToListAsync();
+        public async Task Remove(NewOrderNotification newOrderNotification)
+        {
+            _context.Remove(newOrderNotification);
+            await _context.SaveChangesAsync();
+        }
 
-            foreach(var orderProduct in entity.Order.OrderProducts)
-            {
-                orderProduct.Product = await _context.Products.Where(p => p.ID == orderProduct.ProductId).AsNoTracking().FirstOrDefaultAsync();
-            }
-
-            newOrderNotificationModel.Order = entity.Order.ToModel();
+        public async Task LoadOrder(NewOrderNotification newOrderNotification)
+        {
+            await _context.Entry(newOrderNotification)
+                    .Reference(n => n.Order).Query()
+                        .Include(o => o.Customer)
+                        .Include(o => o.OrderProducts).ThenInclude(op => op.Product)
+                        .LoadAsync();
         }
     }
 }

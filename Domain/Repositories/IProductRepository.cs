@@ -7,10 +7,10 @@ namespace Domain.Repositories
 {
     public interface IProductRepository
     {
-        Task<ProductModel> GetByID(Guid id);
-        Task Add(ProductModel productModel);
-        Task Update(ProductModel productModel);
-        Task Delete(ProductModel productModel);
-        Task<List<ProductModel>> GetAll();
+        Task<Product> GetByID(Guid id);
+        Task Add(Product product);
+        Task Update(Product product);
+        Task Delete(Product product);
+        Task<List<Product>> GetAll();
     }
 }

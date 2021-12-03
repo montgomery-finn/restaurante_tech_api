@@ -8,7 +8,7 @@ namespace restaurante_tech_api.Services.Interfaces
     public interface INewOrderNotificationService
     {
         void AddClient(StreamWriter client);
-        Task AddNotification(NewOrderNotificationModel newOrderNotification);
+        Task AddNotification(NewOrderNotification newOrderNotification);
         Task RemoveNotificationFromOrder(Guid orderId);
         void TryTake();
     }

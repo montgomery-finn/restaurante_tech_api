@@ -4,6 +4,6 @@ namespace restaurante_tech_api.Services.Interfaces
 {
     public interface ITokenService
     {
-        public string GenerateToken(UserModel userModel);
+        public string GenerateToken(User user);
     }
 }

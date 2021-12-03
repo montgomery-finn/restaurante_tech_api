@@ -26,7 +26,7 @@ namespace restaurante_tech_api.Controllers
         }
 
         [HttpGet]
-        public async Task<List<ProductModel>> Index()
+        public async Task<List<Product>> Index()
         {
             return await _productRepository.GetAll();
         }

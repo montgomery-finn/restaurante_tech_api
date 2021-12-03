@@ -1,16 +1,16 @@
-﻿using Domain.Entities;
+﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Data
 {
     public class TechContext : DbContext
     {
-        public DbSet<UserEntity> Users { get; set; }
-        public DbSet<ProductEntity> Products { get; set; }
-        public DbSet<CustomerEntity> Customers { get; set; }
-        public DbSet<OrderEntity> Orders { get; set; }
-        public DbSet<OrderProductEntity> OrderProducts { get; set; }
-        public DbSet<NewOrderNotificationEntity> NewOrderNotifications { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+        public DbSet<NewOrderNotification> NewOrderNotifications { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -24,7 +24,7 @@ namespace Persistence.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UserEntity>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         }
 
     }

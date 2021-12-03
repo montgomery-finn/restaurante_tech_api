@@ -1,12 +1,10 @@
-﻿using Domain.Models;
-using Domain.Repositories;
+﻿using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Domain.Models;
 
 namespace Persistence.Repositories
 {
@@ -19,26 +17,20 @@ namespace Persistence.Repositories
             _context = new TechContext();
         }
 
-        public async Task Add(OrderModel order)
+        public async Task Add(Order order)
         {
-            var entity = order.ToEntity();
-            await _context.AddAsync(entity);
+            await _context.AddAsync(order);
             await _context.SaveChangesAsync();
-            _context.Entry(entity).State = EntityState.Unchanged;
         }
 
-        public async Task<OrderModel> GetById(Guid id)
+        public Task<Order> GetById(Guid id)
         {
-            var entity = await _context.Orders.Where(o => o.ID == id).AsNoTracking().FirstOrDefaultAsync();
-            return entity?.ToModel();
+            return _context.Orders.Where(o => o.ID == id).AsNoTracking().FirstOrDefaultAsync();
         }
 
-        public async Task Update(OrderModel orderModel)
+        public async Task Update(Order order)
         {
-            var entity = orderModel.ToEntity();
-
-            _context.Attach(entity);
-            _context.Update(entity);
+            _context.Update(order);
             await _context.SaveChangesAsync();
         }
     }

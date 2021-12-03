@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using restaurante_tech_api.DTOs;
 using restaurante_tech_api.Services.Interfaces;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace restaurante_tech_api.Controllers
@@ -31,7 +30,7 @@ namespace restaurante_tech_api.Controllers
             if (ModelState.IsValid)
             {
                 var encodedPassword = _cryptographyService.GetEncodedString(createDTO.password);
-                var user = new UserModel(createDTO.name, createDTO.email, encodedPassword);
+                var user = new User(createDTO.name, createDTO.email, encodedPassword);
 
                 await _userRepository.Add(user);
                 return Ok();

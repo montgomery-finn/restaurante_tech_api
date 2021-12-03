@@ -1,11 +1,10 @@
-﻿using Domain.Models;
-using Domain.Repositories;
+﻿using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Domain.Models;
 
 namespace Persistence.Repositories
 {
@@ -18,39 +17,31 @@ namespace Persistence.Repositories
             _context = new TechContext();
         }
 
-        public async Task Add(ProductModel productModel)
+        public async Task Add(Product product)
         {
-            var entity = productModel.ToEntity();
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            _context.Entry(entity).State = EntityState.Unchanged;
-        }
-
-        public async Task<List<ProductModel>> GetAll()
-        {
-            var productEntities = await _context.Products.AsNoTracking().ToListAsync();
-            return productEntities.Select(p => p.ToModel()).ToList();
-        }
-
-        public async Task Delete(ProductModel productModel)
-        {
-            var entity = productModel.ToEntity();
-            _context.Attach(entity);
-            _context.Remove(entity);
+            await _context.AddAsync(product);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ProductModel> GetByID(Guid id)
+        public Task<List<Product>> GetAll()
         {
-            var entity = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.ID == id);
-            return entity?.ToModel();
+            return  _context.Products.AsNoTracking().ToListAsync();
         }
 
-        public async Task Update(ProductModel productModel)
+        public async Task Delete(Product product)
         {
-            var entity = productModel.ToEntity();
-            _context.Attach(entity);
-            _context.Update(entity);
+            _context.Remove(product);
+            await _context.SaveChangesAsync();
+        }
+
+        public Task<Product> GetByID(Guid id)
+        {
+            return _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.ID == id);
+        }
+
+        public async Task Update(Product product)
+        {
+            _context.Update(product);
             await _context.SaveChangesAsync();
         }
 

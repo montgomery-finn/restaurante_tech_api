@@ -1,9 +1,9 @@
-﻿using Domain.Models;
-using Domain.Repositories;
+﻿using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 using System;
 using System.Threading.Tasks;
+using Domain.Models;
 
 namespace Persistence.Repositories
 {
@@ -16,36 +16,31 @@ namespace Persistence.Repositories
             _context = new TechContext();
         }
 
-        public async Task Add(UserModel userModel)
+        public async Task Add(User user)
         {
-            var entity = userModel.ToEntity();
-            await _context.Users.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            _context.Entry(entity).State = EntityState.Unchanged;
-        }
-
-        public async Task Delete(UserModel userModel)
-        {
-            _context.Users.Remove(userModel.ToEntity());
+            await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<UserModel> GetByEmail(string email)
+        public async Task Delete(User user)
         {
-            var userEntity = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
-            return userEntity?.ToModel();
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<UserModel> GetByID(Guid id)
+        public Task<User> GetByEmail(string email)
         {
-            var userEntity = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.ID == id);
-            return userEntity?.ToModel();
+            return _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task Update(UserModel userModel)
+        public Task<User> GetByID(Guid id)
         {
-            var userEntity = userModel.ToEntity();
-            _context.Update(userEntity);
+            return _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.ID == id);
+        }
+
+        public async Task Update(User user)
+        {
+            _context.Update(user);
             await _context.SaveChangesAsync();
         }
     }

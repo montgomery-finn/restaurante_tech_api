@@ -42,25 +42,27 @@ namespace restaurante_tech_api.Controllers
         {
             var customer = await GetCustomer(dto);
 
-            var orderModel = new OrderModel(customer, null);
+            var orderModel = new Order(customer);
+
+            orderModel.OrderProducts = new List<OrderProduct>();
 
             foreach(var productDTO in dto.products)
             {
                 var product = await _productRepository.GetByID(Guid.Parse(productDTO.productId));
-                orderModel.AddProduct(product, productDTO.quantity);
+                orderModel.OrderProducts.Add(new OrderProduct(Guid.Parse(productDTO.productId), productDTO.quantity, orderModel.ID));
             }
 
             await _orderRepository.Add(orderModel);
 
-            var notification = new NewOrderNotificationModel(orderModel.ID, null);
+            var notification = new NewOrderNotification(orderModel.ID, null);
             await _newOrderNotificationService.AddNotification(notification);
 
             return Ok();
         }
 
-        private async Task<CustomerModel> GetCustomer(CreateOrderDTO dto)
+        private async Task<Customer> GetCustomer(CreateOrderDTO dto)
         {
-            CustomerModel customer = null;
+            Customer customer = null;
 
             if (!String.IsNullOrEmpty(dto.cpf))
             {
