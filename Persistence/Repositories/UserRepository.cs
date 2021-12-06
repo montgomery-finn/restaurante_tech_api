@@ -30,12 +30,12 @@ namespace Persistence.Repositories
 
         public Task<User> GetByEmail(string email)
         {
-            return _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
+            return _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public Task<User> GetByID(Guid id)
         {
-            return _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.ID == id);
+            return _context.Users.FirstOrDefaultAsync(u => u.ID == id);
         }
 
         public async Task Update(User user)

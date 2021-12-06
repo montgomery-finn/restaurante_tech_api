@@ -16,19 +16,16 @@ namespace restaurante_tech_api.Controllers
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
         private readonly IOrderRepository _orderRepository;
-        private readonly INewOrderNotificationService _newOrderNotificationService;
 
         public OrdersController(
             ICustomerRepository customerRepository, 
             IProductRepository productRepository, 
-            IOrderRepository orderRepository,
-            INewOrderNotificationService newOrderNotificationService
+            IOrderRepository orderRepository
             )
         {
             _customerRepository = customerRepository;
             _productRepository = productRepository;
             _orderRepository = orderRepository;
-            _newOrderNotificationService = newOrderNotificationService;
         }
 
         [HttpGet]
@@ -38,26 +35,22 @@ namespace restaurante_tech_api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateOrderDTO dto)
+        public async Task<dynamic> Create([FromBody] CreateOrderDTO dto)
         {
             var customer = await GetCustomer(dto);
 
-            var orderModel = new Order(customer);
+            var order = new Order(customer);
 
-            orderModel.OrderProducts = new List<OrderProduct>();
+            order.OrderProducts = new List<OrderProduct>();
 
             foreach(var productDTO in dto.products)
             {
-                var product = await _productRepository.GetByID(Guid.Parse(productDTO.productId));
-                orderModel.OrderProducts.Add(new OrderProduct(Guid.Parse(productDTO.productId), productDTO.quantity, orderModel.ID));
+                order.OrderProducts.Add(new OrderProduct(Guid.Parse(productDTO.productId), productDTO.quantity, order.ID));
             }
 
-            await _orderRepository.Add(orderModel);
+            await _orderRepository.Add(order);
 
-            var notification = new NewOrderNotification(orderModel.ID, null);
-            await _newOrderNotificationService.AddNotification(notification);
-
-            return Ok();
+            return StatusCode(200, order);
         }
 
         private async Task<Customer> GetCustomer(CreateOrderDTO dto)
@@ -89,9 +82,17 @@ namespace restaurante_tech_api.Controllers
 
             await _orderRepository.Update(order);
 
-            await _newOrderNotificationService.RemoveNotificationFromOrder(orderIdGuid);
-
             return Ok();
+        }
+
+        [HttpGet, Route("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            var order = await _orderRepository.GetById(Guid.Parse(id));
+            await _orderRepository.LoadCustomer(order);
+            await _orderRepository.LoadProducts(order);
+
+            return Ok(order);
         }
     }
 }

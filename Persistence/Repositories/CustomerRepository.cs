@@ -24,7 +24,7 @@ namespace Persistence.Repositories
 
         public async Task<Customer> GetByCPF(string cpf)
         {
-            return await _context.Customers.Where(c => c.CPF == cpf).AsNoTracking().FirstOrDefaultAsync();
+            return await _context.Customers.Where(c => c.CPF == cpf).FirstOrDefaultAsync();
         }
     }
 }

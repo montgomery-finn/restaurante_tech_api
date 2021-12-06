@@ -9,5 +9,7 @@ namespace Domain.Repositories
         public Task Add(Order order);
         public Task<Order> GetById(Guid id);
         public Task Update(Order order);
+        public Task LoadCustomer(Order order);
+        public Task LoadProducts(Order order);
     }
 }

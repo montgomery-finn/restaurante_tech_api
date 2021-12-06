@@ -25,13 +25,24 @@ namespace Persistence.Repositories
 
         public Task<Order> GetById(Guid id)
         {
-            return _context.Orders.Where(o => o.ID == id).AsNoTracking().FirstOrDefaultAsync();
+            return _context.Orders.Where(o => o.ID == id).FirstOrDefaultAsync();
         }
 
         public async Task Update(Order order)
         {
             _context.Update(order);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task LoadCustomer(Order order)
+        {
+            await _context.Entry(order).Reference(o => o.Customer).LoadAsync();
+        }
+
+        public async Task LoadProducts(Order order)
+        {
+            await _context.Entry(order).Collection(o => o.OrderProducts).Query().Include(op => op.Product).LoadAsync();
+
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Persistence.Repositories
 
         public Task<List<Product>> GetAll()
         {
-            return  _context.Products.AsNoTracking().ToListAsync();
+            return  _context.Products.ToListAsync();
         }
 
         public async Task Delete(Product product)
