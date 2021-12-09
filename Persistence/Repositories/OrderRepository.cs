@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Models;
+using System.Collections.Generic;
 
 namespace Persistence.Repositories
 {
@@ -43,6 +44,16 @@ namespace Persistence.Repositories
         {
             await _context.Entry(order).Collection(o => o.OrderProducts).Query().Include(op => op.Product).LoadAsync();
 
+        }
+
+        public Task<List<Order>> GetAll()
+        {
+            return _context.Orders.ToListAsync();
+        }
+
+        public async Task LoadUser(Order order)
+        {
+            await _context.Entry(order).Reference(o => o.User).LoadAsync();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Domain.Repositories
@@ -11,5 +12,7 @@ namespace Domain.Repositories
         public Task Update(Order order);
         public Task LoadCustomer(Order order);
         public Task LoadProducts(Order order);
+        public Task LoadUser(Order order);
+        public Task<List<Order>> GetAll();
     }
 }

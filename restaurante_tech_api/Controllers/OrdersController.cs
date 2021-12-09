@@ -16,22 +16,37 @@ namespace restaurante_tech_api.Controllers
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
         private readonly IOrderRepository _orderRepository;
+        private readonly IUserRepository _userRepository;
 
         public OrdersController(
             ICustomerRepository customerRepository, 
             IProductRepository productRepository, 
-            IOrderRepository orderRepository
+            IOrderRepository orderRepository,
+            IUserRepository userRepository
             )
         {
             _customerRepository = customerRepository;
             _productRepository = productRepository;
             _orderRepository = orderRepository;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var orders = await _orderRepository.GetAll();
+            
+            foreach(var order in orders)
+            {
+                await _orderRepository.LoadCustomer(order);
+                await _orderRepository.LoadProducts(order);
+                await _orderRepository.LoadUser(order);
+                
+                if(order.User != null)
+                    order.User.EncodedPassword = "";
+            }
+
+            return Ok(orders.OrderByDescending(o => o.CreatedAt).ToList());
         }
 
         [HttpPost]
@@ -39,7 +54,7 @@ namespace restaurante_tech_api.Controllers
         {
             var customer = await GetCustomer(dto);
 
-            var order = new Order(customer);
+            var order = new Order(customer?.ID);
 
             order.OrderProducts = new List<OrderProduct>();
 
@@ -78,7 +93,14 @@ namespace restaurante_tech_api.Controllers
             if (order == null)
                 return NotFound();
 
-            order.Finish();
+            var userIdGuid = Guid.Parse(dto.userId);
+
+            var user = await _userRepository.GetByID(userIdGuid);
+
+            if (user == null)
+                return StatusCode(400, "Usuário não encontrado");
+
+            order.Finish(user.ID);
 
             await _orderRepository.Update(order);
 

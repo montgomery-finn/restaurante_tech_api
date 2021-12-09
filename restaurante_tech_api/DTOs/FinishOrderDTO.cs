@@ -8,5 +8,6 @@ namespace restaurante_tech_api.DTOs
     public class FinishOrderDTO
     {
         public string orderId { get; set; }
+        public string userId { get; set; }
     }
 }
