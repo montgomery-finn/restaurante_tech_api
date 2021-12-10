@@ -121,7 +121,24 @@ namespace restaurante_tech_api.Controllers
 
             if(order.Customer != null)
             {
-                IncreaseCustomerPoints(order.Customer);
+                var orderWillGeneratePoint = true;
+
+                var pricePaidInPoints = dto.usedPoints;
+
+                if(pricePaidInPoints > 0)
+                {
+                    await _orderRepository.LoadProducts(order);
+                    var maxOrderPoints = order.OrderProducts.Select(o => o.Product.PriceInPoints).Sum();
+                    var customerPaidSomethinWithMoney = maxOrderPoints - pricePaidInPoints > 0;
+
+                    orderWillGeneratePoint = customerPaidSomethinWithMoney;
+                }
+
+                if (orderWillGeneratePoint)
+                {
+                    IncreaseCustomerPoints(order.Customer);
+                }
+
                 await _customerRepository.Update(order.Customer);
             }
 
