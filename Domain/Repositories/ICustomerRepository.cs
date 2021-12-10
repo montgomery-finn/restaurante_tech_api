@@ -7,5 +7,6 @@ namespace Domain.Repositories
     {
         Task Add(Customer customer);
         Task<Customer> GetByCPF(string cpf);
+        Task Update(Customer customer);
     }
 }

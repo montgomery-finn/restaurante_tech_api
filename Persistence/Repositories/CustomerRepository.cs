@@ -26,5 +26,11 @@ namespace Persistence.Repositories
         {
             return await _context.Customers.Where(c => c.CPF == cpf).FirstOrDefaultAsync();
         }
+
+        public async Task Update(Customer customer)
+        {
+            _context.Update(customer);
+            await _context.SaveChangesAsync();
+        }
     }
 }

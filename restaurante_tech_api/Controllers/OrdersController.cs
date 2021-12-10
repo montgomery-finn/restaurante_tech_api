@@ -100,11 +100,42 @@ namespace restaurante_tech_api.Controllers
             if (user == null)
                 return StatusCode(400, "Usuário não encontrado");
 
+            await _orderRepository.LoadCustomer(order);
+
+            if (order.Customer != null)
+            {
+                if(dto.usedPoints > 0)
+                {
+                    if(order.Customer.Points < dto.usedPoints)
+                    {
+                        return StatusCode(400, "O cliente não possui pontos suficientes para esta compra");
+                    }
+
+                    DecreaseCustomerPoints(order.Customer, dto.usedPoints);
+                }
+            }
+
             order.Finish(user.ID);
 
             await _orderRepository.Update(order);
 
+            if(order.Customer != null)
+            {
+                IncreaseCustomerPoints(order.Customer);
+                await _customerRepository.Update(order.Customer);
+            }
+
             return Ok();
+        }
+
+        private void IncreaseCustomerPoints(Customer customer)
+        {
+            customer.Points++;
+        }
+
+        private void DecreaseCustomerPoints(Customer customer, int usedPoints)
+        {
+            customer.Points -= usedPoints;
         }
 
         [HttpGet, Route("{id}")]

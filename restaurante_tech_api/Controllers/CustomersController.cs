@@ -31,5 +31,18 @@ namespace restaurante_tech_api.Controllers
 
             return Ok();
         }
+
+        [HttpGet, Route("points/{cpf}")]
+        public async Task<IActionResult> GetPoints(string cpf)
+        {
+            var customer = await _customerRepository.GetByCPF(cpf);
+
+            if(customer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(customer.Points);
+        }
     }
 }

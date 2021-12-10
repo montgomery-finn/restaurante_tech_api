@@ -6,6 +6,7 @@ namespace Domain.Models
     {
         public Guid ID { get; set; }
         public string CPF { get; set; }
+        public int Points { get; set; }
 
         public Customer() { }
 
