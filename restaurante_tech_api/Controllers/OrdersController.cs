@@ -34,7 +34,7 @@ namespace restaurante_tech_api.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var orders = await _orderRepository.GetAll();
+            var orders = await _orderRepository.GetFinished();
             
             foreach(var order in orders)
             {
@@ -52,7 +52,17 @@ namespace restaurante_tech_api.Controllers
         [HttpPost]
         public async Task<dynamic> Create([FromBody] CreateOrderDTO dto)
         {
-            var customer = await GetCustomer(dto);
+            Customer customer = null;
+
+            if (!String.IsNullOrEmpty(dto.cpf))
+            {
+                customer = await GetCustomer(dto);
+
+                if(customer == null)
+                {
+                    return NotFound("Usuário não encontrado");
+                }
+            }
 
             var order = new Order(customer?.ID);
 

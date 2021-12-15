@@ -21,12 +21,15 @@ namespace Domain.Models
             FileName = fileName;
         }
 
-        public void Update(string name, double price, int priceInPoints, string fileName)
+        public void Update(string name, double price, int priceInPoints, string fileName = null)
         {
             Name = name;
             Price = price;
             PriceInPoints = priceInPoints;
-            FileName = fileName;
+            if(fileName != null)
+            {
+                FileName = fileName;
+            }
         }
     }
 }

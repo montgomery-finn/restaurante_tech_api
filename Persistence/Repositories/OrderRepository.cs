@@ -55,5 +55,10 @@ namespace Persistence.Repositories
         {
             await _context.Entry(order).Reference(o => o.User).LoadAsync();
         }
+
+        public Task<List<Order>> GetFinished()
+        {
+            return _context.Orders.Where(o => o.Finished).ToListAsync();
+        }
     }
 }

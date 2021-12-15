@@ -25,6 +25,13 @@ namespace restaurante_tech_api.Controllers
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
 
+            var sameCpfCustomer = await _customerRepository.GetByCPF(createCustomerDTO.cpf);
+
+            if(sameCpfCustomer != null)
+            {
+                return StatusCode(400, "CPF já cadastrado");
+            }
+
             var customer = new Customer(createCustomerDTO.cpf);
 
             await _customerRepository.Add(customer);
@@ -39,7 +46,7 @@ namespace restaurante_tech_api.Controllers
 
             if(customer == null)
             {
-                return NotFound();
+                return NotFound("CPF não cadastrado");
             }
 
             return Ok(customer.Points);

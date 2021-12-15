@@ -14,5 +14,6 @@ namespace Domain.Repositories
         public Task LoadProducts(Order order);
         public Task LoadUser(Order order);
         public Task<List<Order>> GetAll();
+        public Task<List<Order>> GetFinished();
     }
 }
