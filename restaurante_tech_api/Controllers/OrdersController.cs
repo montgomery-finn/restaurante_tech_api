@@ -70,7 +70,10 @@ namespace restaurante_tech_api.Controllers
 
             foreach(var productDTO in dto.products)
             {
-                order.OrderProducts.Add(new OrderProduct(Guid.Parse(productDTO.productId), productDTO.quantity, order.ID));
+                for(int i = 0; i < productDTO.quantity; i++)
+                {
+                    order.OrderProducts.Add(new OrderProduct(Guid.Parse(productDTO.productId), order.ID));
+                }
             }
 
             await _orderRepository.Add(order);
